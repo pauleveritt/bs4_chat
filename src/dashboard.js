@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let rooms = [
-        {id: 1, title: "First Room"},
-        {id: 2, title: "Second Room"},
-        {id: 3, title: "Last"}
-    ];
+    const ws = new WebSocket("ws://127.0.0.1:5678/");
     var player = Bind(
         {
-            rooms: rooms
+            rooms: [
+                {id: 1, title: "First Room"},
+                {id: 2, title: "Second Room"},
+                {id: 3, title: "Last"}
+            ]
         },
         {
             rooms: {
@@ -21,5 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
         event.preventDefault();
         player.rooms.push(document.querySelector('#newSkill').value);
         this.reset();
+    };
+
+
+    ws.onmessage = function (event) {
+        //player.rooms.push({id: event.data, title: event.data});
     };
 });
