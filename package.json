@@ -18,5 +18,8 @@
   "homepage": "https://github.com/pauleveritt/bs4_chat#readme",
   "devDependencies": {
     "lite-server": "^2.2.2"
+  },
+  "dependencies": {
+    "bootstrap": "^4.0.0-alpha.3"
   }
 }
