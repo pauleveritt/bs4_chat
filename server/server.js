@@ -1,7 +1,19 @@
 var WebSocketServer = require("ws").Server,
     ws = new WebSocketServer({host: "localhost", port: 9002});
 
-var clients = {};
+var clients = {},
+    rooms = [
+        {
+            id: "general",
+            title: "General",
+            messages: [
+                {
+                    from: "hadi",
+                    body: "This is the first message"
+                }
+            ]
+        }
+    ];
 
 var clientConnect = function (connection, username) {
     console.log("connection opened from %s", username);
@@ -39,10 +51,10 @@ var getClientList = function () {
     return output;
 };
 
-ws.on('connection', function connection(ws) {
+ws.on('connection', function connection (ws) {
     var userId;
 
-    ws.on('message', function incoming(message) {
+    ws.on('message', function incoming (message) {
         message = JSON.parse(message);
 
         console.log('incoming', message);
@@ -53,19 +65,20 @@ ws.on('connection', function connection(ws) {
                 sendMessage(userId, userId, "USER_ID");
                 var clientsList = getClientList();
                 sendMessage(null, clientsList, "CLIENT_LIST");
+                sendMessage(userId, rooms, "ROOM_LIST");
                 break;
-            case "MESSAGE":
-                var body = {
-                    username: clients[message.userId].username,
-                    message: message.message
-                };
-
-                sendMessage(message.target, body, "MESSAGE");
+            case "ADD_ROOM":
+                rooms.push({
+                    id: Math.round(Math.random() * 1000000000),
+                    title: message.title,
+                    messages: Math.round(Math.random() * 1000000000)
+                });
+                sendMessage(null, rooms, "ROOM_LIST");
                 break;
         }
     });
 
-    ws.on('close', function close() {
+    ws.on('close', function close () {
         console.log("%s disconnected", clients[userId].username);
         delete clients[userId];
         sendMessage(null, getClientList(), "CLIENT_LIST");

@@ -1,5 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    var player = Bind(
+    let userId = "paul",
+        newRoom = document.querySelector("#newRoom"),
+        chat = Bind(
         {
             rooms: [
                 {id: 1, title: "First Room"},
@@ -15,20 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 },
             }
         });
-
-    document.querySelector('form').onsubmit = function (event) {
-        event.preventDefault();
-        player.rooms.push(document.querySelector('#newSkill').value);
-        this.reset();
-    };
-
-
-    let userId = "paul",
-        clients = [];
-
-    var refreshClientsList = function (updatedClients) {
-        clients = updatedClients;
-    };
+;
 
     var connect = function (username) {
         var socket = new WebSocket("ws://localhost:9002/");
@@ -43,17 +32,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
         socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
+            console.log("dt", data.type);
 
             switch (data.type) {
                 case "CLIENT_LIST":
-                    refreshClientsList(data.body);
+                    // refreshClientsList(data.body);
+                    break;
+                case "ROOM_LIST":
+                    chat.rooms = data.body;
                     break;
                 case "USER_ID":
                     userId = data.body;
                     break;
                 case "MESSAGE":
                     console.log("msg " + data.body.username + ": " + data.body.message);
-                    player.rooms.push({id: 1, title: data.body.message});
+                    chat.rooms.push({id: 1, title: data.body.message});
                     break;
             }
         };
@@ -68,23 +61,20 @@ document.addEventListener("DOMContentLoaded", () => {
             socket.close()
         };
 
-        $("#send-message").click(function (e) {
-            e.preventDefault();
-
-            var message = $("#message").val();
-
-            var obj = {
-                type: "MESSAGE",
-                target: userId,
-                userId: userId,
-                message: message
+        document.querySelector('#addRoom').onsubmit = function (event) {
+            event.preventDefault();
+            let obj = {
+                type: "ADD_ROOM",
+                title: newRoom.value
             };
 
             socket.send(JSON.stringify(obj));
-        });
 
+            newRoom.value = "";
+        };
 
     };
+
 
     connect(userId);
 
