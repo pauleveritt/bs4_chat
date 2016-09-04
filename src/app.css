@@ -1,10 +1,9 @@
 body {
-    padding-top: 62px;
+    padding-top: 54px;
 }
 
 body, html {
     height: 100%;
-    background-color: #55595c;
     color: whitesmoke;
 }
 
@@ -12,6 +11,9 @@ body, html {
     background-color: #373a3c !important;
 }
 
+#sidebar {
+    padding: 0.4rem;
+}
 #sidebar .panel h4 a {
     color: rgba(0, 0, 0, 0.7);
 }
@@ -25,8 +27,12 @@ body.modal-open {
     padding-right: 0 !important;
 }
 
-#sidebar {
-    /*padding-left: 0;*/
+#main {
+    background-color: #55595c;
+}
+
+.main {
+    background-color: #818a91;
 }
 
 /*
