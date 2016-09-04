@@ -20,6 +20,7 @@
     "lite-server": "^2.2.2"
   },
   "dependencies": {
-    "bootstrap": "^4.0.0-alpha.3"
+    "bootstrap": "^4.0.0-alpha.3",
+    "font-awesome": "^4.6.3"
   }
 }
