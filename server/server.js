@@ -1,15 +1,9 @@
-const CONNECT = "CONNECT",
-    USER_ID = "USER_ID",
-    MESSAGE = "MESSAGE",
-    CLIENT_LIST = "CLIENT_LIST";
-
-var constant = require("./../src/shared/Constants"),
-    WebSocketServer = require("ws").Server,
-    ws = new WebSocketServer({host: "192.168.1.9", port: 9000});
+var WebSocketServer = require("ws").Server,
+    ws = new WebSocketServer({host: "localhost", port: 9002});
 
 var clients = {};
 
-var clientConnect = function(connection, username) {
+var clientConnect = function (connection, username) {
     console.log("connection opened from %s", username);
 
     var userId = Math.round(Math.random() * 1000000000);
@@ -20,7 +14,7 @@ var clientConnect = function(connection, username) {
     return userId;
 };
 
-var sendMessage = function(userId, body, type) {
+var sendMessage = function (userId, body, type) {
     var obj = {
         type: type,
         body: body
@@ -28,8 +22,8 @@ var sendMessage = function(userId, body, type) {
 
     var message = JSON.stringify(obj);
 
-    if(!userId) {
-        for(var client in clients) {
+    if (!userId) {
+        for (var client in clients) {
             clients[client].send(message);
         }
     } else {
@@ -37,9 +31,9 @@ var sendMessage = function(userId, body, type) {
     }
 };
 
-var getClientList = function() {
+var getClientList = function () {
     var output = {};
-    for(var client in clients) {
+    for (var client in clients) {
         output[client] = {user_id: client, username: clients[client].username};
     }
     return output;
@@ -51,21 +45,22 @@ ws.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
         message = JSON.parse(message);
 
-        switch(message.type)
-        {
-            case constant.CONNECT:
+        console.log('incoming', message);
+
+        switch (message.type) {
+            case "CONNECT":
                 userId = clientConnect(ws, message.username);
-                sendMessage(userId, userId, constant.USER_ID);
+                sendMessage(userId, userId, "USER_ID");
                 var clientsList = getClientList();
-                sendMessage(null, clientsList, constant.CLIENT_LIST);
+                sendMessage(null, clientsList, "CLIENT_LIST");
                 break;
-            case constant.MESSAGE:
+            case "MESSAGE":
                 var body = {
                     username: clients[message.userId].username,
                     message: message.message
                 };
 
-                sendMessage(message.target, body, constant.MESSAGE);
+                sendMessage(message.target, body, "MESSAGE");
                 break;
         }
     });
@@ -73,8 +68,8 @@ ws.on('connection', function connection(ws) {
     ws.on('close', function close() {
         console.log("%s disconnected", clients[userId].username);
         delete clients[userId];
-        sendMessage(null, getClientList(), constant.CLIENT_LIST);
+        sendMessage(null, getClientList(), "CLIENT_LIST");
     });
 });
 
-console.log("Server listening on port 9000");
+console.log("Server listening on port 9002");
