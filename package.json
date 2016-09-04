@@ -1,0 +1,22 @@
+{
+  "name": "bs4_chat",
+  "version": "1.0.0",
+  "description": "Simple Bootstrap 4 chat demo for Hadi",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pauleveritt/bs4_chat.git"
+  },
+  "author": "Paul Everitt <paul.everitt@jetbrains.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pauleveritt/bs4_chat/issues"
+  },
+  "homepage": "https://github.com/pauleveritt/bs4_chat#readme",
+  "devDependencies": {
+    "lite-server": "^2.2.2"
+  }
+}
