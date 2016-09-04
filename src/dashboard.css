@@ -17,3 +17,7 @@
 .main {
     padding: 20px;
 }
+
+.nav-sidebar li a {
+    color: #373a3c;
+}
