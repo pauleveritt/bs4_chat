@@ -8,6 +8,8 @@ Simple Bootstrap 4 chat demo for Hadi.
 
 ## Running the frontend
 
+- Run a backend on 9002 (see the next section for a demo server)
+
 - npm start
 
 - Go to http://localhost:3000/?#paul
@@ -23,7 +25,7 @@ The client expects the websocket server to run on 9002.
 The URL ends in a hash that provides the username, instead of
 making a facility to choose, save, and change the username.
 
-## running the backend
+## Running the backend
 
 - npm run server
 
