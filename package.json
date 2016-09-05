@@ -5,7 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "lite-server",
-    "serve": "node server/server"
+    "server": "node server/server"
   },
   "repository": {
     "type": "git",

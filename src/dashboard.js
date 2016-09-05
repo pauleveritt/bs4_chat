@@ -3,12 +3,9 @@ document.addEventListener("DOMContentLoaded", () => {
         newRoom = document.querySelector("#newRoom"),
         chat = Bind(
             {
-                currentRoom: "First Room",
-                rooms: [
-                    {id: 1, title: "First Room"},
-                    {id: 2, title: "Second Room"},
-                    {id: 3, title: "Last"}
-                ]
+                username: null,
+                currentRoom: null,
+                rooms: []
             },
             {
                 currentRoom: "#currentRoom",
@@ -87,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
-
     connect(userId);
+    chat.username = location.hash.substring(1);
 
 });
