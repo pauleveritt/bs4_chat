@@ -1,13 +1,17 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let userId = "paul",
-        newRoom = document.querySelector("#newRoom"),
+    let newRoom = document.querySelector("#newRoom"),
         chat = Bind(
             {
                 username: null,
+                userId: null,
                 currentRoom: null,
                 rooms: []
             },
             {
+                username: {
+                    dom: '#username',
+                    transform: (value) => value ? value : 'Disconnected'
+                },
                 currentRoom: "#currentRoom",
                 rooms: {
                     dom: '#rooms',
@@ -17,11 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-    var connect = function (username) {
+    var connect = function () {
         var socket = new WebSocket("ws://localhost:9002/");
 
         socket.onopen = function () {
-            socket.send(JSON.stringify({type: "CONNECT", username: username}));
+            socket.send(JSON.stringify({type: "CONNECT", username: chat.username}));
         };
 
         socket.onclose = function () {
@@ -30,7 +34,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         socket.onmessage = function (event) {
             var data = JSON.parse(event.data);
-            console.log("dt", data.type);
 
             switch (data.type) {
                 case "CLIENT_LIST":
@@ -40,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     chat.rooms = data.body;
                     break;
                 case "USER_ID":
-                    userId = data.body;
+                    chat.userId = data.body;
                     break;
                 case "ROOM_MESSAGES":
                     console.log("room messages", data.body);
@@ -84,7 +87,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     };
 
-    connect(userId);
     chat.username = location.hash.substring(1);
+    if (chat.username) {
+        // If no # in URL, don't connect
+        connect();
+    }
 
 });
