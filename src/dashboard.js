@@ -2,6 +2,7 @@ class ChatClient {
     constructor(userName) {
         this.model = Bind(
             {
+                allUsers: [],
                 userName: userName,
                 userId: null,
                 currentRoom: null,
@@ -15,9 +16,7 @@ class ChatClient {
                 currentRoom: "#currentRoom",
                 rooms: {
                     dom: '#rooms',
-                    transform: function (value) {
-                        return `<li><a href="${value.id}">${value.title}</a></li>`;
-                    },
+                    transform: (value) => `<li><a href="${value.id}">${value.title}</a></li>`
                 }
             });
         this.socket = new WebSocket("ws://localhost:9002/");
@@ -40,8 +39,7 @@ class ChatClient {
     }
 
     onUnload() {
-        this.socket.onclose = function () {
-        };
+        this.socket.onclose = () => null;
         this.socket.close()
     }
 
@@ -50,22 +48,24 @@ class ChatClient {
 
         switch (data.type) {
             case "CLIENT_LIST":
-                // refreshClientsList(data.body);
-                break;
-            case "ROOM_LIST":
-                this.model.rooms = data.body;
-                break;
-            case "USER_ID":
-                this.model.userId = data.body;
-                break;
-            case "ROOM_MESSAGES":
-                console.log("room messages", data.body);
-                break;
-            case "MESSAGE":
-                console.log("msg " + data.body.username + ": " + data.body.message);
-                this.model.rooms.push({id: 1, title: data.body.message});
-                break;
+                this.listUsers(data);
+            case "ROOMS_LIST":
+                return this.listRooms(data);
+            case "ROOM_POSTS":
+                return this.listPosts(data);
         }
+    }
+
+    listUsers(message) {
+        this.model.allUsers = message.body;
+    }
+
+    listRooms(message) {
+        this.model.rooms = message.body;
+    }
+
+    listPosts(message) {
+        this.model.posts = message.body;
     }
 
 }
@@ -86,9 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentRoom: "#currentRoom",
             rooms: {
                 dom: '#rooms',
-                transform: function (value) {
-                    return `<li><a href="${value.id}">${value.title}</a></li>`;
-                },
+                transform: (value) => `<li><a href="${value.id}">${value.title}</a></li>`
             }
         });
 

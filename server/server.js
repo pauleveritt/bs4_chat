@@ -65,7 +65,7 @@ ws.on('connection', function connection (ws) {
                 sendMessage(userId, userId, "USER_ID");
                 var clientsList = getClientList();
                 sendMessage(null, clientsList, "CLIENT_LIST");
-                sendMessage(userId, rooms, "ROOM_LIST");
+                sendMessage(userId, rooms, "ROOMS_LIST");
                 break;
             case "ADD_ROOM":
                 rooms.push({
@@ -73,7 +73,7 @@ ws.on('connection', function connection (ws) {
                     title: message.title,
                     messages: Math.round(Math.random() * 1000000000)
                 });
-                sendMessage(null, rooms, "ROOM_LIST");
+                sendMessage(null, rooms, "ROOMS_LIST");
                 break;
             case "GET_ROOM":
                 let messages = rooms[0].messages;
