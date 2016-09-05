@@ -1,25 +1,24 @@
 document.addEventListener("DOMContentLoaded", () => {
-    let newRoom = document.querySelector("#newRoom"),
-        chat = Bind(
-            {
-                username: null,
-                userId: null,
-                currentRoom: null,
-                rooms: []
+    let chat = Bind(
+        {
+            username: null,
+            userId: null,
+            currentRoom: null,
+            rooms: []
+        },
+        {
+            username: {
+                dom: '#username',
+                transform: (value) => value ? value : 'Disconnected'
             },
-            {
-                username: {
-                    dom: '#username',
-                    transform: (value) => value ? value : 'Disconnected'
+            currentRoom: "#currentRoom",
+            rooms: {
+                dom: '#rooms',
+                transform: function (value) {
+                    return `<li><a href="${value.id}">${value.title}</a></li>`;
                 },
-                currentRoom: "#currentRoom",
-                rooms: {
-                    dom: '#rooms',
-                    transform: function (value) {
-                        return `<li><a href="${value.id}">${value.title}</a></li>`;
-                    },
-                }
-            });
+            }
+        });
 
     var connect = function () {
         var socket = new WebSocket("ws://localhost:9002/");
@@ -67,10 +66,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
         document.querySelector('#addRoom').onsubmit = function (event) {
             event.preventDefault();
-            let obj = {
-                type: "ADD_ROOM",
-                title: newRoom.value
-            };
+
+            let newRoom = document.querySelector("#newRoom"),
+                obj = {
+                    type: "ADD_ROOM",
+                    title: newRoom.value
+                };
 
             socket.send(JSON.stringify(obj));
 
