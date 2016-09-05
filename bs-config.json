@@ -1,5 +1,6 @@
 {
   "browser": "google chrome",
+  "port": 3000,
   "server": {
     "baseDir": "src",
     "routes": {
