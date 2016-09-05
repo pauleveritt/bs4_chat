@@ -75,6 +75,9 @@ ws.on('connection', function connection (ws) {
                 });
                 sendMessage(null, rooms, "ROOM_LIST");
                 break;
+            case "GET_ROOM":
+                let messages = rooms[0].messages;
+                sendMessage(userId, messages, "ROOM_MESSAGES");
         }
     });
 

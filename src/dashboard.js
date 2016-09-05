@@ -2,27 +2,28 @@ document.addEventListener("DOMContentLoaded", () => {
     let userId = "paul",
         newRoom = document.querySelector("#newRoom"),
         chat = Bind(
-        {
-            rooms: [
-                {id: 1, title: "First Room"},
-                {id: 2, title: "Second Room"},
-                {id: 3, title: "Last"}
-            ]
-        },
-        {
-            rooms: {
-                dom: '#rooms',
-                transform: function (value) {
-                    return `<li><a href="#${value.id}">${value.title}</a></li>`;
-                },
-            }
-        });
-;
+            {
+                currentRoom: "First Room",
+                rooms: [
+                    {id: 1, title: "First Room"},
+                    {id: 2, title: "Second Room"},
+                    {id: 3, title: "Last"}
+                ]
+            },
+            {
+                currentRoom: "#currentRoom",
+                rooms: {
+                    dom: '#rooms',
+                    transform: function (value) {
+                        return `<li><a href="${value.id}">${value.title}</a></li>`;
+                    },
+                }
+            });
 
     var connect = function (username) {
         var socket = new WebSocket("ws://localhost:9002/");
 
-        socket.onopen = function (event) {
+        socket.onopen = function () {
             socket.send(JSON.stringify({type: "CONNECT", username: username}));
         };
 
@@ -43,6 +44,9 @@ document.addEventListener("DOMContentLoaded", () => {
                     break;
                 case "USER_ID":
                     userId = data.body;
+                    break;
+                case "ROOM_MESSAGES":
+                    console.log("room messages", data.body);
                     break;
                 case "MESSAGE":
                     console.log("msg " + data.body.username + ": " + data.body.message);
@@ -72,6 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
             newRoom.value = "";
         };
+
+        // Change rooms
+        document.querySelector("#rooms").addEventListener("click", (event) => {
+            event.preventDefault();
+            let roomId = event.target.getAttribute("href");
+            chat.currentRoom = chat.rooms.find(room => room.id === roomId).title;
+            socket.send(JSON.stringify({type: "GET_ROOM", roomId: roomId}))
+        })
 
     };
 
