@@ -1,123 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Bootstrap 4 Chat</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Dashboard Template for Bootstrap</title>
+
     <link rel="stylesheet" href="../node_modules/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="../node_modules/font-awesome/css/font-awesome.css">
-
-    <link rel="stylesheet" href="app.css"/>
+    <link rel="stylesheet" href="app.css">
 </head>
+
 <body>
-<nav class="navbar navbar-fixed-top navbar-dark bg-primary">
-    <button class="navbar-toggler hidden-sm-up pull-right" type="button" data-toggle="collapse"
-            data-target="#collapsingNavbar">
-        ☰
-    </button>
-    <a class="navbar-brand" href="#">Navbar</a>
-    <div class="collapse navbar-toggleable-xs" id="collapsingNavbar">
-        <ul class="nav navbar-nav pull-right">
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">Home</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="#myAlert" data-toggle="collapse">Wow</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="" data-target="#myModal" data-toggle="modal">About</a>
-            </li>
-        </ul>
-    </div>
-</nav>
-<div class="container-fluid" id="main">
+
+<div class="container">
     <div class="row">
-        <div class="col-md-3 col-lg-2 sidebar-offcanvas" id="sidebar" role="navigation">
-
-
-            <div id="accordionFirst" role="tablist" aria-multiselectable="true">
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingFirst">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseFirst"
-                               aria-expanded="true" aria-controls="collapseFirst">
-                                First Room
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseFirst" class="panel-collapse collapse in" role="tabpanel"
-                         aria-labelledby="headingFirst">
-                        <ul class="nav nav-pills nav-stacked">
-                            <li class="nav-item"><a class="nav-link" href="#">Hadi</a></li>
-                            <li class="nav-item"><a class="nav-link" href="#">Paul</a></li>
-                        </ul>
-                    </div>
-                </div>
+        <div class="col-md-2 sidebar">
+            <div id="header">
+                <h4>HaHa Chat</h4>
+                <div><em id="username"></em></div>
             </div>
-
+            <ul id="rooms" class="nav nav-sidebar"></ul>
+            <form id="addRoom" action="#">
+                <fieldset>
+                    <input id="newRoom" class="form-control" type="text"
+                           placeholder="Add Room" autocomplete="off"/>
+                </fieldset>
+            </form>
         </div>
-        <!--/col-->
-
-        <div class="col-md-9 col-lg-10 main">
-
-            <!--toggle sidebar button-->
-            <p class="hidden-md-up">
-                <button type="button" class="btn btn-primary-outline btn-sm" data-toggle="offcanvas"><i
-                        class="fa fa-chevron-left"></i> Menu
-                </button>
-            </p>
-
-            <h2>
-                Bootstrap 4 Dashboard
-            </h2>
-            <p class="lead">(with off-canvas sidebar, based on BS v4 alpha)</p>
-
-            <div class="alert alert-warning fade collapse" role="alert" id="myAlert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <strong>Holy guacamole!</strong> It's free.. this is an example theme.
-            </div>
-
+        <div class="col-md-8 offset-md-2 main">
+            <h1 id="currentRoom"></h1>
+            <ul id="currentPosts" class="list-group"></ul>
+            <form id="addPost" action="#">
+                <fieldset>
+                    <input id="newPost" class="form-control" type="text"
+                           placeholder="Add Post" autocomplete="off"/>
+                </fieldset>
+            </form>
         </div>
-        <!--/main col-->
-    </div>
 
-</div>
-<!--/.container-->
-<footer class="container-fluid">
-    <p class="text-right small">©2015 Company</p>
-</footer>
-
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                    <span class="sr-only">Close</span>
-                </button>
-                <h4 class="modal-title" id="myModalLabel">Large Modal</h4>
-            </div>
-            <div class="modal-body">
-                This is a dashboard layout for Bootstrap 4. This is an example of the Modal component which you can use
-                to show content. Any content can be placed inside the modal and it can use the Bootstrap grid classes.
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary-outline" data-dismiss="modal">OK</button>
-            </div>
-        </div>
     </div>
 </div>
 
-<script src="../node_modules/jquery/dist/jquery.js"></script>
-<script src="../node_modules/tether/dist/js/tether.js"></script>
-<script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
-
+<script src="../node_modules/bind.js/lib/bind.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

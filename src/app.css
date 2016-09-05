@@ -1,37 +1,41 @@
-body {
-    padding-top: 54px;
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    border-right: 1px solid #eee;
+
+    /*Additions*/
+    background-color: rgba(129, 138, 145, 1);
 }
 
-body, html {
-    height: 100%;
-    color: whitesmoke;
+#header {
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
-.navbar {
-    background-color: #373a3c !important;
+.sidebar input {
+    background-color: #ccc;
 }
 
-#sidebar {
-    padding: 0.4rem;
-}
-#sidebar .panel h4 a {
-    color: rgba(0, 0, 0, 0.7);
+#rooms {
+    min-height: 20rem;
 }
 
-#sidebar .panel a {
-    color: rgba(255, 255, 255, 0.65);
-}
-
-/* workaround modal-open padding issue */
-body.modal-open {
-    padding-right: 0 !important;
-}
-
-#main {
-    background-color: #55595c;
+#currentPosts {
+    height: 23rem;
+    overflow: scroll;
 }
 
 .main {
-    background-color: #818a91;
-    padding-top: 1rem;
+    padding: 20px;
+}
+
+.nav-sidebar li a {
+    color: #373a3c;
 }
