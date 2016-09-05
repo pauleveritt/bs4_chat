@@ -24,12 +24,16 @@
 }
 
 #rooms {
-    min-height: 20rem;
+    min-height: 26rem;
 }
 
 #currentPosts {
-    height: 23rem;
+    height: 28rem;
     overflow: scroll;
+}
+
+#addPost {
+    margin-top: 2rem;
 }
 
 .main {

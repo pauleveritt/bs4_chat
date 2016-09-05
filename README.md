@@ -68,6 +68,10 @@ Here's the basic programming flow:
     * The websocket onmessage handler dispatches incoming messages to
       ChatClient methods
 
+- The frontend doesn't do any sorting. When a post is added, all clients
+  get the entire list. So if you want reverse sorting on date, do it on
+  the server (or get me to do it on the client)
+
 ## About the Backend
 
 - It maintains a list of connected clients aka users. Only used currently
