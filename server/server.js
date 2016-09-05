@@ -66,6 +66,8 @@ ws.on('connection', function connection (ws) {
                 var clientsList = getClientList();
                 sendMessage(null, clientsList, "CLIENT_LIST");
                 sendMessage(userId, rooms, "ROOMS_LIST");
+                let messages = rooms[0].messages;
+                sendMessage(userId, messages, "ROOM_MESSAGES");
                 break;
             case "ADD_ROOM":
                 rooms.push({
