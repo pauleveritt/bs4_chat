@@ -34,11 +34,11 @@ class ChatClient {
         this.socket.send(JSON.stringify({type: "CONNECT", username: this.model.userName}));
     }
 
-    static onClose() {
+    onClose() {
         console.log("You were disconnected from the server");
     }
 
-    static onError(event) {
+    onError(event) {
         console.log("Error:", event);
     }
 
@@ -69,113 +69,26 @@ class ChatClient {
     }
 
     listPosts(message) {
-        this.model.posts = message.body;
+        console.log("LIST_POSTS", message);
+        this.model.currentRoom = message.body;
     }
 
     addRoom() {
         if (this.model.newRoom) {
-            console.log(this.model.newRoom);
-        } else {
-            console.log('no room');
+            let obj = {type: "ADD_ROOM", title: this.model.newRoom};
+            this.socket.send(JSON.stringify(obj));
+            this.model.newRoom = "";
         }
-        this.model.newRoom = '';
     }
 
     setRoom(roomId) {
-        this.model.currentRoom = this.model.rooms.find(room => room.id === roomId);
-        console.log(999, this.model.currentRoom);
-        // socket.send(JSON.stringify({type: "GET_ROOM", roomId: roomId}))
+        console.log("setting", roomId);
+        this.socket.send(JSON.stringify({type: "GET_ROOM", roomId: roomId}))
     }
 
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    // let chat = Bind(
-    //     {
-    //         username: null,
-    //         userId: null,
-    //         currentRoom: null,
-    //         rooms: []
-    //     },
-    //     {
-    //         username: {
-    //             dom: '#username',
-    //             transform: (value) => value ? value : 'Disconnected'
-    //         },
-    //         currentRoom: "#currentRoom",
-    //         rooms: {
-    //             dom: '#rooms',
-    //             transform: (value) => `<li><a href="${value.id}">${value.title}</a></li>`
-    //         }
-    //     });
-    //
-    // var connect = function () {
-    //     var socket = new WebSocket("ws://localhost:9002/");
-    //
-    //     socket.onopen = function () {
-    //         socket.send(JSON.stringify({type: "CONNECT", username: chat.username}));
-    //     };
-    //
-    //     socket.onclose = function () {
-    //         console.log("You were disconnected from the server");
-    //     };
-    //
-    //     socket.onmessage = function (event) {
-    //         var data = JSON.parse(event.data);
-    //
-    //         switch (data.type) {
-    //             case "CLIENT_LIST":
-    //                 // refreshClientsList(data.body);
-    //                 break;
-    //             case "ROOM_LIST":
-    //                 chat.rooms = data.body;
-    //                 break;
-    //             case "USER_ID":
-    //                 chat.userId = data.body;
-    //                 break;
-    //             case "ROOM_MESSAGES":
-    //                 console.log("room messages", data.body);
-    //                 break;
-    //             case "MESSAGE":
-    //                 console.log("msg " + data.body.username + ": " + data.body.message);
-    //                 chat.rooms.push({id: 1, title: data.body.message});
-    //                 break;
-    //         }
-    //     };
-    //
-    //     socket.onerror = function (event) {
-    //         console.log(event);
-    //     };
-    //
-    //     window.onbeforeunload = function () {
-    //         socket.onclose = function () {
-    //         };
-    //         socket.close()
-    //     };
-    //
-    //     document.querySelector('#addRoom').onsubmit = function (event) {
-    //         event.preventDefault();
-    //
-    //         let newRoom = document.querySelector("#newRoom"),
-    //             obj = {
-    //                 type: "ADD_ROOM",
-    //                 title: newRoom.value
-    //             };
-    //
-    //         socket.send(JSON.stringify(obj));
-    //
-    //         newRoom.value = "";
-    //     };
-    //
-    //     // Change rooms
-    //     document.querySelector("#rooms").addEventListener("click", (event) => {
-    //         event.preventDefault();
-    //         let roomId = event.target.getAttribute("href");
-    //         chat.currentRoom = chat.rooms.find(room => room.id === roomId).title;
-    //         socket.send(JSON.stringify({type: "GET_ROOM", roomId: roomId}))
-    //     })
-    //
-    // };
 
     let username = location.hash.substring(1);
     // If no # in URL, don't connect
@@ -183,14 +96,102 @@ document.addEventListener("DOMContentLoaded", () => {
     let chat = new ChatClient(username);
     window.onbeforeunload = () => chat.onUnload();
 
-    // Add some event handlers
+    // Handle the add room input box form submission
     document.querySelector('#addRoom').addEventListener("submit", (event) => {
         event.preventDefault();
         chat.addRoom();
     });
+    // Handle clicking on a room in the list
     document.querySelector("#rooms").addEventListener("click", (event) => {
         event.preventDefault();
         chat.setRoom(event.target.getAttribute("href"));
     });
 
 });
+
+// let chat = Bind(
+//     {
+//         username: null,
+//         userId: null,
+//         currentRoom: null,
+//         rooms: []
+//     },
+//     {
+//         username: {
+//             dom: '#username',
+//             transform: (value) => value ? value : 'Disconnected'
+//         },
+//         currentRoom: "#currentRoom",
+//         rooms: {
+//             dom: '#rooms',
+//             transform: (value) => `<li><a href="${value.id}">${value.title}</a></li>`
+//         }
+//     });
+//
+// var connect = function () {
+//     var socket = new WebSocket("ws://localhost:9002/");
+//
+//     socket.onopen = function () {
+//         socket.send(JSON.stringify({type: "CONNECT", username: chat.username}));
+//     };
+//
+//     socket.onclose = function () {
+//         console.log("You were disconnected from the server");
+//     };
+//
+//     socket.onmessage = function (event) {
+//         var data = JSON.parse(event.data);
+//
+//         switch (data.type) {
+//             case "CLIENT_LIST":
+//                 // refreshClientsList(data.body);
+//                 break;
+//             case "ROOM_LIST":
+//                 chat.rooms = data.body;
+//                 break;
+//             case "USER_ID":
+//                 chat.userId = data.body;
+//                 break;
+//             case "ROOM_MESSAGES":
+//                 console.log("room messages", data.body);
+//                 break;
+//             case "MESSAGE":
+//                 console.log("msg " + data.body.username + ": " + data.body.message);
+//                 chat.rooms.push({id: 1, title: data.body.message});
+//                 break;
+//         }
+//     };
+//
+//     socket.onerror = function (event) {
+//         console.log(event);
+//     };
+//
+//     window.onbeforeunload = function () {
+//         socket.onclose = function () {
+//         };
+//         socket.close()
+//     };
+//
+//     document.querySelector('#addRoom').onsubmit = function (event) {
+//         event.preventDefault();
+//
+//         let newRoom = document.querySelector("#newRoom"),
+//             obj = {
+//                 type: "ADD_ROOM",
+//                 title: newRoom.value
+//             };
+//
+//         socket.send(JSON.stringify(obj));
+//
+//         newRoom.value = "";
+//     };
+//
+//     // Change rooms
+//     document.querySelector("#rooms").addEventListener("click", (event) => {
+//         event.preventDefault();
+//         let roomId = event.target.getAttribute("href");
+//         chat.currentRoom = chat.rooms.find(room => room.id === roomId).title;
+//         socket.send(JSON.stringify({type: "GET_ROOM", roomId: roomId}))
+//     })
+//
+// };

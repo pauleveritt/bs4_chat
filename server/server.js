@@ -4,12 +4,22 @@ var WebSocketServer = require("ws").Server,
 var clients = {},
     rooms = [
         {
-            id: "general",
+            id: Math.random() * 1000000000,
             title: "General",
-            messages: [
+            posts: [
                 {
                     from: "hadi",
                     body: "This is the first message"
+                }
+            ]
+        },
+        {
+            id: Math.random() * 1000000000,
+            title: "Random",
+            posts: [
+                {
+                    from: "hadi",
+                    body: "Anothe first message for another room"
                 }
             ]
         }
@@ -66,20 +76,19 @@ ws.on('connection', function connection (ws) {
                 var clientsList = getClientList();
                 sendMessage(null, clientsList, "CLIENT_LIST");
                 sendMessage(userId, rooms, "ROOMS_LIST");
-                let messages = rooms[0].messages;
-                sendMessage(userId, messages, "ROOM_MESSAGES");
+                sendMessage(userId, rooms[0], "ROOM_POSTS");
                 break;
             case "ADD_ROOM":
                 rooms.push({
                     id: Math.round(Math.random() * 1000000000),
                     title: message.title,
-                    messages: Math.round(Math.random() * 1000000000)
+                    posts: []
                 });
                 sendMessage(null, rooms, "ROOMS_LIST");
                 break;
             case "GET_ROOM":
-                let messages = rooms[0].messages;
-                sendMessage(userId, messages, "ROOM_MESSAGES");
+                let room =rooms.find((room) => room.id == message.roomId);
+                sendMessage(userId, room, "ROOM_POSTS");
         }
     });
 
